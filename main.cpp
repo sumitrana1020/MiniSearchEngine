@@ -12,6 +12,7 @@ class SearchEngine {
 private:
     unordered_map<string, unordered_map<string, int>> index;
     vector<string> searchHistory;
+    unordered_map<string,int> searchCount;
 
 public:
     void indexFile(const string& filename) {
@@ -43,38 +44,73 @@ public:
         file.close();
     }
 
-    void search(const string& keyword) {
+    void showStats() {
+        cout << "\n===== SEARCH STATISTICS =====\n";
 
-        string key = keyword;
+        cout << "Total Searches: "
+            << searchHistory.size()
+            << "\n\n";
 
-        for (char &c : key)
-            c = tolower(c);
+        vector<pair<string,int>> stats;
 
-        searchHistory.push_back(key);
+        for(auto &x : searchCount)
+            stats.push_back(x);
 
-        if (index.find(key) == index.end()) {
+        sort(stats.begin(), stats.end(),
+            [](auto &a, auto &b){
+                return a.second > b.second;
+            });
+
+        cout << "Most Searched Queries:\n";
+
+        for(auto &x : stats)
+            cout << x.first << " -> " << x.second << "\n";
+    }
+
+    void search(const string& query) {
+
+        searchHistory.push_back(query);
+        searchCount[query]++;
+
+        unordered_map<string, int> documentScores;
+
+        stringstream ss(query);
+        string word;
+
+        while (ss >> word) {
+
+            for (char &c : word)
+                c = tolower(c);
+
+            if (index.find(word) != index.end()) {
+
+                for (auto &doc : index[word]) {
+                    documentScores[doc.first] += doc.second;
+                }
+            }
+        }
+
+        if (documentScores.empty()) {
             cout << "\nNo documents found.\n";
             return;
         }
 
-        vector<pair<string, int>> results;
+        vector<pair<string,int>> results;
 
-        for (auto &doc : index[key]) {
-            results.push_back({doc.first, doc.second});
+        for (auto &doc : documentScores) {
+            results.push_back(doc);
         }
 
         sort(results.begin(), results.end(),
-             [](auto &a, auto &b) {
-                 return a.second > b.second;
-             });
+            [](const auto &a, const auto &b){
+                return a.second > b.second;
+            });
 
-        cout << "\nSearch Results for \"" << key << "\"\n";
+        cout << "\nSearch Results for \"" << query << "\"\n";
         cout << "----------------------------------\n";
 
         for (auto &result : results) {
-            cout << result.first
-                 << "  (Occurrences: "
-                 << result.second << ")\n";
+            cout << result.first << " (Score: "<< result.second << ")\n";
         }
     }
 
@@ -109,7 +145,8 @@ int main() {
         cout << "\n===== MINI SEARCH ENGINE =====\n";
         cout << "1. Search Word\n";
         cout << "2. View Search History\n";
-        cout << "3. Exit\n";
+        cout << "3. View Statistics\n";
+        cout << "4. Exit\n";
         cout << "Enter Choice: ";
 
         cin >> choice;
@@ -133,6 +170,10 @@ int main() {
             break;
 
         case 3:
+            engine.showStats();
+            break;
+        
+        case 4:
             cout << "Exiting...\n";
             break;
 
@@ -140,7 +181,7 @@ int main() {
             cout << "Invalid Choice!\n";
         }
 
-    } while(choice != 3);
+    } while(choice != 4);
 
     return 0;
 }
