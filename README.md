@@ -45,3 +45,12 @@ Search: cloud
 Result:
 
 cloud.txt (Occurrences: 3)
+## Future Enhancements
+
+- Support multi-word search queries.
+- Implement Trie-based autocomplete suggestions.
+- Add TF-IDF ranking for more relevant search results.
+- Develop a graphical/web-based user interface.
+- Enable indexing of PDF and DOCX documents.
+- Store search history in files for persistent tracking.
+- Improve search performance for large document collections.
