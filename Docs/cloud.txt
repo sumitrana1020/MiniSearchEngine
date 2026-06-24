@@ -1,0 +1,3 @@
+Cloud computing provides scalable resources.
+AWS and Azure are cloud platforms.
+Cloud services are widely used.
