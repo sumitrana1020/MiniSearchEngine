@@ -45,6 +45,7 @@ Search: cloud
 Result:
 
 cloud.txt (Occurrences: 3)
+
 ## Future Enhancements
 
 - Support multi-word search queries.
