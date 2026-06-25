@@ -1,3 +1,5 @@
-C++ supports object oriented programming.
-C++ uses classes and objects.
-C++ is powerful.
+C++ is a powerful programming language used for software development.
+It supports object oriented programming concepts such as classes and objects.
+C++ provides features like inheritance, polymorphism, encapsulation and abstraction.
+The Standard Template Library contains vectors, maps, queues and stacks.
+C++ is widely used in game development, operating systems and competitive programming.

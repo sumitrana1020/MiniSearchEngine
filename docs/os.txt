@@ -1,0 +1,5 @@
+An operating system manages computer hardware and software resources.
+Examples include Windows, Linux and macOS.
+The operating system handles process management, memory management and file systems.
+Scheduling algorithms determine how CPU time is allocated.
+Operating systems provide security and resource management.

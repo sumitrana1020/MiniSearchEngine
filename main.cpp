@@ -278,7 +278,10 @@ int main() {
     vector<string> files = {
         "docs/cpp.txt",
         "docs/dsa.txt",
-        "docs/cloud.txt"
+        "docs/cloud.txt",
+        "docs/os.txt",
+        "docs/dbms.txt",
+        "docs/networking.txt"
     };
 
     for (string file : files) {

@@ -1,3 +1,5 @@
-Cloud computing provides scalable resources.
-AWS and Azure are cloud platforms.
-Cloud services are widely used.
+Cloud computing provides on demand computing resources over the internet.
+Popular cloud platforms include AWS, Microsoft Azure and Google Cloud.
+Cloud services offer scalability, reliability and flexibility.
+Organizations use cloud computing for storage, networking and application deployment.
+Cloud technology is an important part of modern software systems.

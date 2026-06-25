@@ -1,0 +1,5 @@
+A Database Management System stores and manages structured data.
+Popular database systems include MySQL, PostgreSQL and Oracle.
+SQL is used to query and manipulate data.
+Database normalization reduces redundancy and improves consistency.
+Transactions ensure data integrity and reliability.

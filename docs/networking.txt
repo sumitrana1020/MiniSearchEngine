@@ -1,0 +1,5 @@
+Computer networks enable communication between devices.
+Important networking concepts include IP addresses, routers and switches.
+Protocols such as TCP and UDP govern data transmission.
+The internet is the largest computer network in the world.
+Network security protects systems from unauthorized access.

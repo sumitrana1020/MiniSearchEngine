@@ -1,2 +1,5 @@
-Data structures include arrays stacks queues trees graphs.
-Trees are important in DSA.
+Data Structures and Algorithms are fundamental concepts in computer science.
+Common data structures include arrays, linked lists, stacks, queues and trees.
+Algorithms are used for searching, sorting and optimization problems.
+Binary Search and Merge Sort are important algorithms.
+Efficient data structures improve program performance and scalability.
