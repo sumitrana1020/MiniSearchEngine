@@ -13,9 +13,12 @@ private:
     unordered_map<string, unordered_map<string, int>> index;
     vector<string> searchHistory;
     unordered_map<string,int> searchCount;
+    vector<string> documentList;
+    unordered_map<string,unordered_map<string,int>> documentWords;
 
 public:
     void indexFile(const string& filename) {
+        documentList.push_back(filename);
         ifstream file(filename);
 
         if (!file.is_open()) {
@@ -38,10 +41,64 @@ public:
 
             while (ss >> cleanedWord) {
                 index[cleanedWord][filename]++;
+                documentWords[filename][cleanedWord]++;
             }
         }
 
         file.close();
+    }
+
+    void analyzeDocument(string filename) {
+
+        if(documentWords.find(filename)
+        == documentWords.end()) {
+
+            cout << "Document not found\n";
+            return;
+        }
+
+        vector<pair<string,int>> words;
+
+        for(auto &x : documentWords[filename])
+            words.push_back(x);
+
+        sort(words.begin(),
+            words.end(),
+            [](auto &a, auto &b){
+
+                return a.second > b.second;
+            });
+
+        cout << "\nTop Keywords in "
+            << filename
+            << "\n\n";
+
+        int limit =
+            min((int)words.size(), 5);
+
+        for(int i=0;i<limit;i++) {
+
+            cout << words[i].first
+                << " -> "
+                << words[i].second
+                << endl;
+        }
+    }
+
+    void showDocuments() {
+
+        cout << "\n===== INDEXED DOCUMENTS =====\n";
+
+        for(int i=0;i<documentList.size();i++) {
+
+            cout << i+1 << ". "
+                << documentList[i]
+                << endl;
+        }
+
+        cout << "\nTotal Documents: "
+            << documentList.size()
+            << endl;
     }
 
     void showStats() {
@@ -71,6 +128,13 @@ public:
 
         searchHistory.push_back(query);
         searchCount[query]++;
+
+        ofstream historyFile("history.txt", ios::app);
+
+        if(historyFile.is_open()) {
+            historyFile << query << endl;
+            historyFile.close();
+        }
 
         unordered_map<string, int> documentScores;
 
@@ -142,12 +206,12 @@ int main() {
 
     do {
 
-        cout << "\n===== MINI SEARCH ENGINE =====\n";
         cout << "1. Search Word\n";
         cout << "2. View Search History\n";
         cout << "3. View Statistics\n";
-        cout << "4. Exit\n";
-        cout << "Enter Choice: ";
+        cout << "4. Show Indexed Documents\n";
+        cout << "5. Analyze Document\n";
+        cout << "6. Exit\n";
 
         cin >> choice;
 
@@ -174,14 +238,28 @@ int main() {
             break;
         
         case 4:
+        engine.showDocuments();
+        break;
+
+        case 5: {
+            string filename;
+
+            cout << "Enter document name: ";
+            getline(cin, filename);
+
+            engine.analyzeDocument(filename);
+            break;
+        }
+
+        case 6:
             cout << "Exiting...\n";
             break;
 
-        default:
-            cout << "Invalid Choice!\n";
-        }
+            default:
+                cout << "Invalid Choice!\n";
+            }
 
-    } while(choice != 4);
+        } while(choice != 6);
 
     return 0;
 }
