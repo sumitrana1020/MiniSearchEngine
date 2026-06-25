@@ -15,8 +15,90 @@ private:
     unordered_map<string,int> searchCount;
     vector<string> documentList;
     unordered_map<string,unordered_map<string,int>> documentWords;
+    struct TrieNode {
+    TrieNode* child[26];
+        bool endWord;
+        TrieNode() {
+            endWord = false;
+
+            for(int i = 0; i < 26; i++)
+                child[i] = nullptr;
+        }
+    };
+    TrieNode* root = new TrieNode();
 
 public:
+    void insertTrie(string word) {
+        TrieNode* curr = root;
+        for(char c : word) {
+
+            if(!isalpha(c))
+                continue;
+
+            c = tolower(c);
+
+            int idx = c - 'a';
+
+            if(curr->child[idx] == nullptr)
+                curr->child[idx] = new TrieNode();
+
+            curr = curr->child[idx];
+        }
+
+        curr->endWord = true;
+    }
+
+    void collectWords(TrieNode* node,string current,vector<string>& result) {
+        if(node == nullptr)
+            return;
+
+        if(node->endWord)
+            result.push_back(current);
+
+        for(int i = 0; i < 26; i++) {
+            if(node->child[i]) {
+
+                collectWords(
+                    node->child[i],
+                    current + char('a' + i),
+                    result);
+            }
+        }
+    }
+
+    void suggest(string prefix) {
+        for(char &c : prefix)
+            c = tolower(c);
+
+        TrieNode* curr = root;
+
+        for(char c : prefix) {
+
+            if(!isalpha(c))
+                continue;
+
+            int idx = c - 'a';
+
+            if(curr->child[idx] == nullptr) {
+
+                cout << "\nNo suggestions found.\n";
+                return;
+            }
+            curr = curr->child[idx];
+        }
+        vector<string> result;
+        collectWords(curr, prefix, result);
+
+        cout << "\nSuggestions:\n";
+
+        if(result.empty()) {
+            cout << "No suggestions found.\n";
+            return;
+        }
+        for(string word : result)
+            cout << word << endl;
+    }
+
     void indexFile(const string& filename) {
         documentList.push_back(filename);
         ifstream file(filename);
@@ -42,6 +124,7 @@ public:
             while (ss >> cleanedWord) {
                 index[cleanedWord][filename]++;
                 documentWords[filename][cleanedWord]++;
+                insertTrie(cleanedWord);
             }
         }
 
@@ -211,7 +294,8 @@ int main() {
         cout << "3. View Statistics\n";
         cout << "4. Show Indexed Documents\n";
         cout << "5. Analyze Document\n";
-        cout << "6. Exit\n";
+        cout << "6. Autocomplete\n";
+        cout << "7. Exit\n";
 
         cin >> choice;
 
@@ -238,8 +322,8 @@ int main() {
             break;
         
         case 4:
-        engine.showDocuments();
-        break;
+            engine.showDocuments();
+            break;
 
         case 5: {
             string filename;
@@ -251,15 +335,26 @@ int main() {
             break;
         }
 
-        case 6:
+        case 6: {
+            string prefix;
+
+            cout << "Enter prefix: ";
+            getline(cin, prefix);
+
+            engine.suggest(prefix);
+
+            break;
+        }
+
+        case 7:
             cout << "Exiting...\n";
             break;
 
-            default:
-                cout << "Invalid Choice!\n";
-            }
+        default:
+            cout << "Invalid Choice!\n";
+        }
 
-        } while(choice != 6);
+        } while(choice != 7);
 
     return 0;
 }
